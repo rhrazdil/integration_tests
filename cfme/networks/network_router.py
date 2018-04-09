@@ -9,11 +9,12 @@ from cfme.networks.views import (NetworkRouterDetailsView, NetworkRouterView, Ne
                                  NetworkRouterEditView, NetworkRouterAddInterfaceView)
 from cfme.utils import version
 from cfme.utils.appliance.implementations.ui import navigator, CFMENavigateStep, navigate_to
+from cfme.utils.update import Updateable
 from cfme.utils.wait import wait_for
 
 
 @attr.s
-class NetworkRouter(Taggable, BaseEntity):
+class NetworkRouter(Taggable, BaseEntity, Updateable):
     """ Class representing network ports in sdn"""
     in_version = ('5.8', version.LATEST)
     category = 'networks'
@@ -44,7 +45,7 @@ class NetworkRouter(Taggable, BaseEntity):
         view.toolbar.configuration.item_select('Delete this Router', handle_alert=True)
         view.flash.assert_success_message('Delete initiated for 1 Network Router.')
 
-    def edit(self, name=None, change_external_gw=None, ext_network=None, ext_network_subnet=None):
+    def update(self, updates):
         """Edit this router
 
         Args:
@@ -56,19 +57,14 @@ class NetworkRouter(Taggable, BaseEntity):
                 applicable if 'external gateway' is enabled
         """
         view = navigate_to(self, 'Edit')
-        view.fill({'router_name': name,
-                   'ext_gateway': change_external_gw,
-                   'network_name': ext_network,
-                   'subnet_name': ext_network_subnet})
-        view.save.click()
-        success_msg = 'Network Router "{}" updated'.format(name if name else self.name)
-        view.flash.assert_success_message(success_msg)
-        if name:
-            self.name = name
-        if change_external_gw is False:
-            self.ext_network = None
-        if ext_network:
-            self.ext_network = ext_network
+        view.fill_with({
+            'router_name': updates.get('name'),
+            'ext_gateway': updates.get('change_external_gw'),
+            'network_name': updates.get('network_name'),
+            'subnet_name': updates.get('ext_network_subnet')
+        }, on_change=view.save.click)
+        view.flash.assert_no_error()
+        view.browser.refresh()
 
     @property
     def exists(self):

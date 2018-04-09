@@ -8,11 +8,12 @@ from cfme.modeling.base import BaseCollection, BaseEntity, parent_of_type
 from cfme.networks.views import SubnetDetailsView, SubnetView, SubnetAddView, SubnetEditView
 from cfme.utils import providers, version
 from cfme.utils.appliance.implementations.ui import navigator, CFMENavigateStep, navigate_to
+from cfme.utils.update import Updateable
 from cfme.utils.wait import wait_for
 
 
 @attr.s
-class Subnet(Taggable, BaseEntity):
+class Subnet(Taggable, BaseEntity, Updateable):
     """Class representing subnets in sdn"""
     in_version = ('5.8', version.LATEST)
     category = 'networks'
@@ -33,7 +34,7 @@ class Subnet(Taggable, BaseEntity):
         else:
             return True
 
-    def edit(self, new_name, gateway=None):
+    def update(self, updates):
         """Edit cloud subnet
 
         Args:
@@ -41,11 +42,12 @@ class Subnet(Taggable, BaseEntity):
             gateway: (str) IP of new gateway, for example: 11.11.11.1
         """
         view = navigate_to(self, 'Edit')
-        view.fill({'subnet_name': new_name,
-                   'gateway': gateway})
-        view.save.click()
-        view.flash.assert_success_message('Cloud Subnet "{}" updated'.format(new_name))
-        self.name = new_name
+        view.fill_with({
+            'subnet_name': updates.get('new_name'),
+            'gateway': updates.get('gateway')
+        }, on_change=view.save.click)
+        view.flash.assert_no_error()
+        view.browser.refresh()
 
     def delete(self):
         """Deletes this subnet"""

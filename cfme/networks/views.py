@@ -425,6 +425,7 @@ class NetworkRouterAddView(BaseLoggedInPage):
     subnet_name = Select(name='cloud_subnet_id')
     cloud_tenant = Select(name='cloud_tenant_id')
     add = Button('Add')
+    cancel = Button('Cancel')
 
     @property
     def is_displayed(self):
@@ -438,6 +439,7 @@ class NetworkRouterEditView(BaseLoggedInPage):
     network_name = Select(name='cloud_network_id')
     subnet_name = Select(name='cloud_subnet_id')
     save = Button('Save')
+    cancel = Button('Cancel')
 
     @property
     def is_displayed(self):
@@ -555,9 +557,9 @@ class SubnetDetailsToolBar(View):
 class SubnetAddView(BaseLoggedInPage):
     """ Represents Add view of subnet """
     title = Text('//div[@id="main-content"]//h1')
-    network_manager = Select(id='ems_id')
-    cloud_tenant = Select(name='cloud_tenant_id')
-    network = Select(name='network_id')
+    network_manager = BootstrapSelect(id='ems_id')
+    cloud_tenant = BootstrapSelect(name='cloud_tenant_id')
+    network = BootstrapSelect(name='network_id')
     subnet_name = TextInput(name='name')
     subnet_cidr = TextInput(name='cidr')
     gateway = TextInput(name='gateway_ip')
