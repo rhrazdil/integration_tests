@@ -1,12 +1,11 @@
 from cfme.base.login import BaseLoggedInPage
 from widgetastic.widget import View
-# from widgetastic_manageiq import Button
 from widgetastic_patternfly import Button
 
 
 class MigrationsOverviewView(BaseLoggedInPage):
-    mapping = Button('Create Infrastructure Mapping')
-    plan = Button('Create Migration Plan')
+    create_mapping_button = Button('Create Infrastructure Mapping')
+    create_plan_button = Button('Create Migration Plan')
 
     @property
     def is_displayed(self):

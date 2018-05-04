@@ -1,19 +1,17 @@
-""" A model of a migration in CFME
+""" A model of a migration mappings page
 
 """
 import attr
-from navmazing import NavigateToAttribute, NavigateToSibling
-from cfme.modeling.base import BaseCollection, BaseEntity, parent_of_type
-from cfme.utils.appliance.implementations.ui import navigator, CFMENavigateStep, navigate_to
-from cfme.utils.wait import wait_for
-from widgetastic.widget import View
+from navmazing import NavigateToAttribute
+from cfme.modeling.base import BaseCollection, BaseEntity
+from cfme.utils.appliance.implementations.ui import navigator, CFMENavigateStep
 from views import InfrastructureMappingView
 
 
 @attr.s
 class InfrastructureMapping(BaseEntity):
     """Class representing v2v infrastructure mappings"""
-    category = 'migration'
+    category = 'migrations'
     string_name = 'Migration'
 
 

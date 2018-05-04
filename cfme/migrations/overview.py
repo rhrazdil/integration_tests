@@ -1,9 +1,7 @@
-""" A model of a migration in CFME
+""" A model of a migration overview page
 
 """
 from navmazing import NavigateToSibling, NavigateToAttribute
-
-from cfme.base.login import BaseLoggedInPage
 from cfme.utils.appliance.implementations.ui import CFMENavigateStep, navigator
 from cfme.utils.appliance import Navigatable
 from views import MigrationsOverviewView
@@ -20,4 +18,3 @@ class All(CFMENavigateStep):
 
     def step(self):
         self.prerequisite_view.navigation.select('Compute', 'Migration', 'Overview')
-
